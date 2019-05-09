@@ -6,6 +6,9 @@ import org.testng.annotations.Test;
 
 import java.util.Map;
 
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static org.hamcrest.CoreMatchers.equalTo;
+
 public class BoardOperations extends BaseTest {
 
 
@@ -21,7 +24,7 @@ public class BoardOperations extends BaseTest {
                 .queryParam("name", defaultListName)
                 .pathParam("ParamID", boardId).post("1/Boards/{ParamID}/lists");
         Map<String, ?> responseMap = response.jsonPath().getMap("$");
-        response.then().statusCode(200);
+        //response.then().statusCode(200);
         listID = responseMap.get("id").toString();
         System.out.println("list id id " + listID);
 
@@ -39,9 +42,14 @@ public class BoardOperations extends BaseTest {
                 .pathParam("ParamID", listID)
                 .post("1/lists/{ParamID}/cards");
         Map<String, ?> responseMap = responseCardRequest.jsonPath().getMap("$");
-        responseCardRequest.then().statusCode(200);
+        //responseCardRequest.then().statusCode(200);
         System.out.println("Card id is    " + responseMap.get("id").toString());
         cardId = responseMap.get("id").toString();
+        responseCardRequest.then().body(matchesJsonSchemaInClasspath("package.json"));
+
+        /*responseCardRequest
+                .then()
+                .body("name",equalTo(defaultCardName)); */
 
 
     }
@@ -50,12 +58,12 @@ public class BoardOperations extends BaseTest {
 
     public void deleteCard() {
 
-
+        System.out.println("Card id is ******" + cardId);
         Response responseCardDelete = requestSpecification.when()
                 .queryParam("name", defaultCardName)
                 .pathParam("ParamID", cardId)
                 .delete("1/cards/{ParamID}");
-        responseCardDelete.then().statusCode(200);
+        //responseCardDelete.then().statusCode(200);
 
     }
 

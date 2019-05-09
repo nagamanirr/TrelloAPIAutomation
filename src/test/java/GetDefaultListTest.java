@@ -57,6 +57,9 @@ List<String> expectedListsInTheBoard=new ArrayList<>();
 
       Assert.assertTrue(actualListsInTheBoard.equals(expectedListsInTheBoard),"ListNotCreated");
 
+
+    System.out.println("Response code is *******"+response.getStatusCode());
+
     response.then().statusCode(200);
 
 
